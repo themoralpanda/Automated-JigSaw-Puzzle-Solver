@@ -1,13 +1,14 @@
 function piece = AnalyzePiece( test )
     I = imread(test);
     [x,y] = size(I);
+    disp(test);
     %if x > y;disp('vertical');else;disp('horizontal');end;
-    %top = AnalyzeEdge('top',x,y, I);
+    top = AnalyzeEdge('top',x,y, I);
     left = AnalyzeEdge('left',x,y, I); 
-    %bottom = AnalyzeEdge('bottom',x,y, I);    
-    %right = AnalyzeEdge('right',x,y, I);    
+    bottom = AnalyzeEdge('bottom',x,y, I);    
+    right = AnalyzeEdge('right',x,y, I);    
 
-  %  piece = [left 0 0 0]
+    piece = [left top right bottom]
     
  
   end
@@ -26,8 +27,8 @@ function piece = AnalyzePiece( test )
         [x,y] = size(A);
         
         [A,B,C,D] = cutImage('vertical',x,y,A);
-        disp("top");
-        weight = [sum(sum(A))  sum(sum(B)) sum(sum(C)) sum(sum(D))]
+        
+        weight = [sum(sum(A))  sum(sum(B)) sum(sum(C)) sum(sum(D))];
         type = checkTypeOfEdge(weight);
         %plotCuts(A,B,C,D,'horizontal');        
     else
@@ -35,44 +36,17 @@ function piece = AnalyzePiece( test )
         [A,B,C,D] = cutImage('vertical',x,y,I);
         [x,y] = size(A);
         [A,B,C,D] = cutImage('horizontal',x,y,A);
-        disp("left")
-        weight = [sum(sum(A))  sum(sum(B)) sum(sum(C)) sum(sum(D))]
+        
+        weight = [sum(sum(A))  sum(sum(B)) sum(sum(C)) sum(sum(D))];
         type = checkTypeOfEdge(weight);
-        %check for bulb
-        
-        
-% %Old code for testing bulb - start        
-%         if i == 2 || i == 3
-%             if ((0.5*weight(i))>=weight(i+1) && (0.5*weight(i))>=weight(i-1)) || (
-%                 type = [1 0 0 0]
-%             end
-%         else
-%             if i == 1 
-%                 if (0.1*weight(i))>=weight(i+2) && (0.1*weight(i))>=weight(4)
-%                     type = [1 0 0 0]
-%                 end
-%                 
-%             else
-%                 if i == 4
-%                 if (0.1*weight(i))>=weight(i-2) && (0.1*weight(i))>=weight(1)
-%                     type = [1 0 0 0]
-%                 end
-%                 end
-%             
-%             end                                
-%         end
-% %Old code for testing bulb - end 
-        
-                
-        
        % plotCuts(A,B,C,D,'vertical');        
     else
     if(strcmp(pos,'bottom') ==1)
         [A,B,C,D] = cutImage('horizontal',x,y,I);
         [x,y] = size(D);
         [A,B,C,D] = cutImage('vertical',x,y,D);
-        disp("bottom")
-        weight = [sum(sum(A))  sum(sum(B)) sum(sum(C)) sum(sum(D))]
+        
+        weight = [sum(sum(A))  sum(sum(B)) sum(sum(C)) sum(sum(D))];
         type = checkTypeOfEdge(weight);
         %plotCuts(A,B,C,D,'horizontal');  
         
@@ -81,8 +55,8 @@ function piece = AnalyzePiece( test )
         [A,B,C,D] = cutImage('vertical',x,y,I);
         [x,y] = size(D);
         [A,B,C,D] = cutImage('horizontal',x,y,D);
-        disp("right")
-        weight = [sum(sum(A))  sum(sum(B)) sum(sum(C)) sum(sum(D))]
+        
+        weight = [sum(sum(A))  sum(sum(B)) sum(sum(C)) sum(sum(D))];
         type = checkTypeOfEdge(weight);
         %plotCuts(A,B,C,D,'vertical');        
     end
@@ -99,10 +73,21 @@ function piece = AnalyzePiece( test )
 
 
  function etype = checkTypeOfEdge(weight)
-     peak = max(weight);
-     peak2 = second_max(weight);
+     sortedWeights = sort(weight,'descend');
+     peak = sortedWeights(1);
+     peak2 = sortedWeights(2);
+     peak3 = sortedWeights(3);
+     %peak2 = second_max(weight)
      i = find(weight == peak);
-     j = find(weight == peak2);
+     if isscalar(i) == 1
+       j = find(weight == peak2);
+     else
+       j = i(2);
+       i = i(1);
+     end
+       
+     
+     
      peakRegion = weight(i)+weight(j);
 
      remaining = 0;
@@ -115,7 +100,7 @@ function piece = AnalyzePiece( test )
         end 
 
         if( (0.3 * peakRegion) >= remaining)
-            etype = 1
+            etype = 1;
             return;
         else
             etype = 0;
@@ -126,8 +111,8 @@ function piece = AnalyzePiece( test )
      
      % check for Line
      if etype == 0
-        weight2 = weight(weight~=peak);
-        peak3 = second_max(weight2);
+        %weight2 = weight(weight~=peak);
+        %peak3 = second_max(weight2);
         k = find(weight == peak3);
         
         peaks = sort([i j k]);
@@ -135,14 +120,20 @@ function piece = AnalyzePiece( test )
         %Condition1 : Check if three peaks are adjacent
         if abs(peaks(1) - peaks(2)) == 1 && abs(peaks(2) - peaks(3)) == 1
             %Condition2 : check for the average pixels in the three peaks
-            if peak2 >= 0.8*peak && peak3 >=0.8*peak2
-                etype = 2
+            if peak2 >= 0.6*peak && peak3 >=0.6*peak2
+                etype = 2;
             end
             
         end
             
         
      end
+     
+     %check for hole
+     if etype == 0
+         etype = -1;
+     end
+         
      
  
  end
