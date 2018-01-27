@@ -1,16 +1,17 @@
 function piece = AnalyzePiece( test )
     I = imread(test);
     [x,y] = size(I);
-    disp(test);
     %if x > y;disp('vertical');else;disp('horizontal');end;
     top = AnalyzeEdge('top',x,y, I);
     left = AnalyzeEdge('left',x,y, I); 
     bottom = AnalyzeEdge('bottom',x,y, I);    
     right = AnalyzeEdge('right',x,y, I);    
 
-    piece = [left top right bottom]
+    piece = [left top right bottom];
     
- 
+
+   
+
   end
 
 
@@ -81,6 +82,9 @@ function piece = AnalyzePiece( test )
      i = find(weight == peak);
      if isscalar(i) == 1
        j = find(weight == peak2);
+       if isscalar(j) ~= 1
+           j = j(1);
+       end
      else
        j = i(2);
        i = i(1);
@@ -139,40 +143,6 @@ function piece = AnalyzePiece( test )
  end
  
  %Utility functions below
-
-  function[A,B,C,D] = cutImage(direction,x,y,I)
-    if (strcmp(direction,'vertical') == 1)        
-        A=I(:,1:y/4);
-        B=I(:,(y/4+1):(y/2));
-        C=I(:,(y/2+1):(y/2+y/4));
-        D=I(:,(y/2+y/4+1):y);
-    else
-        if (strcmp(direction,'horizontal') == 1)
-        A=I(1:x/4 , :);
-        B=I((x/4+1):(x/2) , :);
-        C=I((x/2+1):(x/2+x/4) , :);
-        D=I((x/2+x/4+1):x , :);
-        
-        end
-    end 
- end
- 
- function [] = plotCuts(A,B,C,D,direction)
-    if(strcmp(direction, 'vertical') == 1)
-        subplot(4,1,1);imshow(A);
-        subplot(4,1,2);imshow(B);
-        subplot(4,1,3);imshow(C);
-        subplot(4,1,4);imshow(D);
-    else
-        if (strcmp(direction, 'horizontal') ==1)
-            subplot(1,4,1);imshow(A);
-            subplot(1,4,2);imshow(B);
-            subplot(1,4,3);imshow(C);
-            subplot(1,4,4);imshow(D);
-        end
-    end
-    
- end
  
  function [ y ] = second_max( x )
 
