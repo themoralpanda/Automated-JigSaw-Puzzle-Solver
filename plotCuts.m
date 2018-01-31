@@ -1,4 +1,5 @@
  function [] = plotCuts(A,B,C,D,direction)
+ % Utility function to plot the cuts for image analysis 
     if(strcmp(direction, 'vertical') == 1)
         subplot(4,1,1);imshow(A);
         subplot(4,1,2);imshow(B);

@@ -1,22 +1,17 @@
 function piece = AnalyzePiece( test )
+    % Function to analyze the puzzle pieces
+    % returns : Shape vector 'piece'
     I = imread(test);
-    [x,y] = size(I);
-    %if x > y;disp('vertical');else;disp('horizontal');end;
-    top = AnalyzeEdge('top',x,y, I);
-    left = AnalyzeEdge('left',x,y, I); 
-    bottom = AnalyzeEdge('bottom',x,y, I);    
-    right = AnalyzeEdge('right',x,y, I);    
-
-    piece = [left top right bottom];
+    [x,y] = size(I);    
     
+    top = AnalyzeEdge('top',x,y, I); %Analyze Top edge
+    left = AnalyzeEdge('left',x,y, I); %Analyze Left edge
+    bottom = AnalyzeEdge('bottom',x,y, I); %Analyze bottom edge    
+    right = AnalyzeEdge('right',x,y, I); %Analyze Right edge   
 
-   
-
+    piece = [left top right bottom];    
   end
 
-
-
- 
  function type = AnalyzeEdge(pos, x, y, I)
     %type = {1 bulb , 0 line, -1 hole}
     %pos = {'top', 'bottom', 'left', 'right'}
@@ -38,7 +33,7 @@ function piece = AnalyzePiece( test )
         [x,y] = size(A);
         [A,B,C,D] = cutImage('horizontal',x,y,A);
         
-        weight = [sum(sum(A))  sum(sum(B)) sum(sum(C)) sum(sum(D))];
+        weight = [sum(sum(A))  sum(sum(B)) sum(sum(C)) sum(sum(D))]
         type = checkTypeOfEdge(weight);
        % plotCuts(A,B,C,D,'vertical');        
     else
@@ -65,10 +60,6 @@ function piece = AnalyzePiece( test )
     end
     end
     
-        
-
-        
-
  end
  
 
@@ -89,9 +80,6 @@ function piece = AnalyzePiece( test )
        j = i(2);
        i = i(1);
      end
-       
-     
-     
      peakRegion = weight(i)+weight(j);
 
      remaining = 0;

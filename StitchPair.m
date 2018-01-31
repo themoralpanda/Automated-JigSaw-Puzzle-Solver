@@ -1,34 +1,26 @@
 function [img] = StitchPair( p1, p2 , id )
-
+%This module is for stitching two puzzle pieces that fit together
 
 p1n = p1;p2n = p2;
 p1 = imread(p1);
-
 p2 = imread(p2);
 
-
-%
+%Preprocessing of the puzzle pieces before fusing
 p1 = (imrotate(p1,-90));
 p2 = (imrotate(p2,-90));
 [x1,y1,z1]= size(p1)
 [x2,y2,z2] = size(p2)
-
-
 b = zeros(x2,y1-57,3); % for right bulb
 b = cat(2,b,p2);
-
 imshow(b);
-
-
-
 
 img = imrotate(imfuse(p1,b,'blend','Scaling','joint'),90);
 imshow(img);
 res = verify(img)
-% 
+
 if res == 0
 
-    % % There is a mismatch in size
+    %There is a mismatch in size
     diff  = abs(x1-x2)
 
     p1Spec = AnalyzePiece(extractAfter(p1n,'c'))
@@ -80,18 +72,14 @@ if res == 0
 
         end
     end
-end
-    % 
-    
+end    
 name = strcat('fuse', num2str(id), '.png');
-imwrite(img,name);
-% 
-%        
-%       
- end
-% 
+imwrite(img,name);  
+end
+ 
+% Utiltiy Function % 
 function res = verify(img)
-
+    %Verifies if the built fuse is Ok to proceed with
     [x,y,z] = size(img);
     grayp1 = rgb2gray(img);
     img = logical(zeros(x,y));

@@ -1,4 +1,5 @@
   function[A,B,C,D] = cutImage(direction,x,y,I)
+    % Function to cut the given image I in the requested direction. 
     if (strcmp(direction,'vertical') == 1)        
         A=I(:,1:y/4);
         B=I(:,(y/4+1):(y/2));
