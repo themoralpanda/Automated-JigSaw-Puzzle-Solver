@@ -1,4 +1,10 @@
-  function[A,B,C,D] = cutImage(direction,x,y,I)
+% Title : Jigsaw Puzzle Solver
+% Author : VENKATACHALAPATHI Vigneshwar
+% Email: haivicky@gmail.com
+% Technical Paper/doc: https://www.dropbox.com/s/6tnes1h34q8azv3/Automated%20Solver%20for%20the%20JigSaw%20Puzzles.pdf?dl=0
+% Video Demo: https://youtu.be/9E3sHeETj9Q
+
+function[A,B,C,D] = cutImage(direction,x,y,I)
     % Function to cut the given image I in the requested direction. 
     if (strcmp(direction,'vertical') == 1)        
         A=I(:,1:y/4);

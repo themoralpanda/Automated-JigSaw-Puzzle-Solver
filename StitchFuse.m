@@ -1,3 +1,10 @@
+% Title : Jigsaw Puzzle Solver
+% Author : VENKATACHALAPATHI Vigneshwar
+% Email: haivicky@gmail.com
+% Technical Paper/doc: https://www.dropbox.com/s/6tnes1h34q8azv3/Automated%20Solver%20for%20the%20JigSaw%20Puzzles.pdf?dl=0
+% Video Demo: https://youtu.be/9E3sHeETj9Q
+
+
 function [img] = StitchFuse( p1, p2 , id )
 % This module fuses two already fused segments that fit together
 
